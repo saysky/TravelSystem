@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ssm.travel.dao.PlaceDao">
+
+    <resultMap type="com.example.ssm.travel.entity.Place" id="PlaceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="thumbnail" column="thumbnail" jdbcType="VARCHAR"/>
+        <result property="slideUrl" column="slide_url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="PlaceMap">
+        select
+          id, name, content, thumbnail,slide_url
+        from t_place
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="PlaceMap">
+        select
+          id, name, content, thumbnail,slide_url
+        from t_place
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PlaceMap">
+        select
+        id, name, content, thumbnail
+        from t_place
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="thumbnail != null and thumbnail != ''">
+                and thumbnail = #{thumbnail}
+            </if>
+            <if test="slideUrl != null and slideUrl != ''">
+                and slide_url = #{slideUrl}
+            </if>
+        </where>
+    </select>
+    <select id="getPlaceRank" resultType="java.lang.Integer">
+        SELECT
+            o.place_id
+        FROM
+            t_place p
+            LEFT JOIN t_guide_order o ON p.id = o.place_id
+        GROUP BY
+            o.place_id
+        ORDER BY
+            count( * ) DESC
+    </select>
+
+    <!--  查询景点信息，mybatis支持<where>、<if>等标签，&lt;是小于符号，&gt;是大于符号  -->
+    <select id="searchPlace" resultMap="PlaceMap">
+        SELECT * FROM t_place t
+        <where>
+            1 = 1
+            <if test="placeSearchVO.name != null and placeSearchVO.name != ''">
+                and t.name LIKE CONCAT('%', #{placeSearchVO.name} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_place(name, content, thumbnail, slide_url)
+        values (#{name}, #{content}, #{thumbnail}, #{slideUrl})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_place
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="thumbnail != null and thumbnail != ''">
+                thumbnail = #{thumbnail},
+            </if>
+            <if test="slideUrl != null and slideUrl != ''">
+                slide_url = #{slideUrl}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from t_place where id = #{id}
+    </delete>
+
+</mapper>

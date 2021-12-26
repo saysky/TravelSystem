@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ssm.travel.dao.HouseDao">
+
+    <resultMap type="com.example.ssm.travel.entity.House" id="HouseMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="thumbnail" column="thumbnail" jdbcType="VARCHAR"/>
+        <result property="slideUrl" column="slide_url" jdbcType="VARCHAR"/>
+        <result property="money" column="money" jdbcType="NUMERIC"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="HouseMap">
+        select
+          id, title, content, thumbnail, money, user_id, create_time,slide_url
+        from t_house
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="HouseMap">
+        select
+          id, title, content, thumbnail, money, user_id, create_time,slide_url
+        from t_house
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="HouseMap">
+        select
+        id, title, content, thumbnail, money, user_id, create_time,slide_url
+        from t_house
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="thumbnail != null and thumbnail != ''">
+                and thumbnail = #{thumbnail}
+            </if>
+            <if test="slideUrl != null and slideUrl != ''">
+                and slide_url = #{slideUrl}
+            </if>
+            <if test="money != null">
+                and money = #{money}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+    <select id="getHouseRank" resultType="java.lang.Integer">
+        SELECT
+                o.house_id, count(*)
+        FROM
+                t_house p
+                LEFT JOIN t_live_order o ON p.id = o.house_id
+        GROUP BY
+                o.house_id
+        ORDER BY
+                count( * ) DESC
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_house(title, content, thumbnail, money, user_id, create_time,slide_url)
+        values (#{title}, #{content}, #{thumbnail}, #{money}, #{userId}, #{createTime}, #{slideUrl})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_house
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="thumbnail != null and thumbnail != ''">
+                thumbnail = #{thumbnail},
+            </if>
+            <if test="slideUrl != null and slideUrl != ''">
+                slide_url = #{slideUrl},
+            </if>
+            <if test="money != null">
+                money = #{money},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from t_house where id = #{id}
+    </delete>
+
+    <!--  查询房子信息，mybatis支持<where>、<if>等标签，&lt;是小于符号，&gt;是大于符号  -->
+    <select id="searchHouse" resultMap="HouseMap">
+        SELECT * FROM t_house t
+        <where>
+            1 = 1
+            <if test="houseSearchVO.minPrice != null">
+                and t.money &gt;= #{houseSearchVO.minPrice}
+            </if>
+            <if test="houseSearchVO.maxPrice != null">
+                and t.money &lt;= #{houseSearchVO.maxPrice}
+            </if>
+            <if test="houseSearchVO.title != null and houseSearchVO.title != ''">
+                and t.title LIKE CONCAT('%', #{houseSearchVO.title} ,'%')
+            </if>
+            <if test="houseSearchVO.liveDate != null and houseSearchVO.liveDate != ''">
+                and t.id NOT IN (
+                    SELECT house_id FROM t_live_order
+                    WHERE house_id = t.id AND
+                    DATE_FORMAT( live_date, "%m/%d/%Y" ) = #{houseSearchVO.liveDate}
+                 )
+            </if>
+        </where>
+    </select>
+
+</mapper>

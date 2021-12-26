@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ssm.travel.dao.LiveOrderDao">
+
+    <resultMap type="com.example.ssm.travel.entity.LiveOrder" id="LiveOrderMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="houseId" column="house_id" jdbcType="INTEGER"/>
+        <result property="guestUserId" column="guest_user_id" jdbcType="INTEGER"/>
+        <result property="liveDate" column="live_date" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="money" column="money" jdbcType="NUMERIC"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LiveOrderMap">
+        select
+          id, house_id, guest_user_id, live_date, create_time, status, money
+        from t_live_order
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LiveOrderMap">
+        select
+          id, house_id, guest_user_id, live_date, create_time, status, money
+        from t_live_order
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="LiveOrderMap">
+        select
+          id, house_id, guest_user_id, live_date, create_time, status, money
+        from t_live_order
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="houseId != null">
+                and house_id = #{houseId}
+            </if>
+            <if test="guestUserId != null">
+                and guest_user_id = #{guestUserId}
+            </if>
+            <if test="liveDate != null">
+                and live_date = #{liveDate}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="money != null">
+                and money = #{money}
+            </if>
+        </where>
+    </select>
+    <select id="selectCountByHouseIdAndLiveDate" resultType="java.lang.Integer">
+        select count(*) from t_live_order where house_id = #{houseId}
+        and DATE_FORMAT(live_date, "%Y-%m-%d") = #{liveDate} AND status != 1
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_live_order(house_id, guest_user_id, live_date, create_time, status, money)
+        values (#{houseId}, #{guestUserId}, #{liveDate}, #{createTime}, #{status}, #{money})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_live_order
+        <set>
+            <if test="houseId != null">
+                house_id = #{houseId},
+            </if>
+            <if test="guestUserId != null">
+                guest_user_id = #{guestUserId},
+            </if>
+            <if test="liveDate != null">
+                live_date = #{liveDate},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="money != null">
+                money = #{money},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from t_live_order where id = #{id}
+    </delete>
+
+</mapper>

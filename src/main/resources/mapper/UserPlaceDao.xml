@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ssm.travel.dao.UserPlaceDao">
+
+    <resultMap type="com.example.ssm.travel.entity.UserPlace" id="UserPlaceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="placeId" column="place_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserPlaceMap">
+        select
+          id, user_id, place_id
+        from t_user_place
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserPlaceMap">
+        select
+          id, user_id, place_id
+        from t_user_place
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserPlaceMap">
+        select
+          id, user_id, place_id
+        from t_user_place
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="placeId != null">
+                and place_id = #{placeId}
+            </if>
+        </where>
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into t_user_place(user_id, place_id)
+        values (#{userId}, #{placeId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update t_user_place
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="placeId != null">
+                place_id = #{placeId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from t_user_place where id = #{id}
+    </delete>
+
+    <delete id="deleteByUserId">
+        delete from t_user_place where user_id = #{userId}
+    </delete>
+
+</mapper>
