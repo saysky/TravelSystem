@@ -87,4 +87,3 @@ public interface HouseDao extends BaseMapper<House> {
      */
     List<House> searchHouse(@Param("houseSearchVO") HouseSearchVO houseSearchVO,
                             @Param("page") Page page);
-}

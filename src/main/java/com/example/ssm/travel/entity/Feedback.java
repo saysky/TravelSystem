@@ -137,4 +137,3 @@ public class Feedback implements Serializable {
     public void setAcceptUser(User acceptUser) {
         this.acceptUser = acceptUser;
     }
-}

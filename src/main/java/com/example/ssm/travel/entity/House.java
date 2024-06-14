@@ -131,4 +131,3 @@ public class House implements Serializable {
     public void setSlideUrlList(List<String> slideUrlList) {
         this.slideUrlList = slideUrlList;
     }
-}

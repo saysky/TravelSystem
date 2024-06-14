@@ -186,4 +186,3 @@ public class LiveOrder implements Serializable {
     public void setLandlordUser(User landlordUser) {
         this.landlordUser = landlordUser;
     }
-}

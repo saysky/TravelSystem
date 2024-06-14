@@ -54,4 +54,3 @@ public class UserPlace implements Serializable {
         this.placeId = placeId;
     }
 
-}

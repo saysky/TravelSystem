@@ -70,4 +70,3 @@ public interface LiveOrderDao extends BaseMapper<LiveOrder> {
 
     Integer selectCountByHouseIdAndLiveDate(@Param("houseId") Integer houseId,
                                             @Param("liveDate") String liveDate);
-}

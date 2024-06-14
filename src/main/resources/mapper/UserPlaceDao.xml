@@ -72,4 +72,3 @@
         delete from t_user_place where user_id = #{userId}
     </delete>
 
-</mapper>

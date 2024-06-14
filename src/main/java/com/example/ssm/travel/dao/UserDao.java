@@ -83,4 +83,3 @@ public interface UserDao extends BaseMapper<User> {
     List<User> searchGuide(@Param("guideSearchVO") GuideSearchVO guideSearchVO,
                             @Param("page") Page page);
 
-}

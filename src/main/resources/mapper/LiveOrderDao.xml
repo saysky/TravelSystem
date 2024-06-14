@@ -99,4 +99,3 @@
         delete from t_live_order where id = #{id}
     </delete>
 
-</mapper>

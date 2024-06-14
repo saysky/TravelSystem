@@ -95,4 +95,3 @@
         delete from t_feedback where id = #{id}
     </delete>
 
-</mapper>

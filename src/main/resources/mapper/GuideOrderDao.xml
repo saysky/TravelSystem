@@ -101,4 +101,3 @@
         DATE_FORMAT(guide_date, "%Y-%m-%d") = #{guideDate} limit 1
     </select>
 
-</mapper>

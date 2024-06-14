@@ -103,4 +103,3 @@
         delete from t_place where id = #{id}
     </delete>
 
-</mapper>

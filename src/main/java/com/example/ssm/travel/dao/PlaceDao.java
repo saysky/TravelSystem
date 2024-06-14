@@ -87,4 +87,3 @@ public interface PlaceDao extends BaseMapper<Place> {
      */
     List<Place> searchPlace(@Param("placeSearchVO") PlaceSearchVO placeSearchVO,
                             @Param("page") Page page);
-}

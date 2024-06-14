@@ -139,4 +139,3 @@ public class GuideOrder implements Serializable {
     public void setPlace(Place place) {
         this.place = place;
     }
-}

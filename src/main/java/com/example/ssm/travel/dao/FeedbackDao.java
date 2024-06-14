@@ -66,4 +66,3 @@ public interface FeedbackDao extends BaseMapper<Feedback> {
      */
     int deleteById(Integer id);
 
-}

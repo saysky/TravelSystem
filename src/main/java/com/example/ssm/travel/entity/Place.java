@@ -95,4 +95,3 @@ public class Place implements Serializable {
     public void setSlideUrlList(List<String> slideUrlList) {
         this.slideUrlList = slideUrlList;
     }
-}

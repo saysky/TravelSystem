@@ -84,4 +84,3 @@ public interface GuideOrderDao extends BaseMapper<GuideOrder> {
     GuideOrder findByUserIdAndGuideDate(@Param("guideUserId") Integer guideUserId,
                                       @Param("guestUserId") Integer guestUserId,
                                       @Param("guideDate") String guideDate);
-}

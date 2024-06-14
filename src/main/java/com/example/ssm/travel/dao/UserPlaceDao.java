@@ -69,4 +69,3 @@ public interface UserPlaceDao  extends BaseMapper<UserPlace> {
 
     void deleteByUserId(Integer userId);
 
-}
